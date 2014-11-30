@@ -9,7 +9,7 @@ using System.Xml;
 using System.IO;
 using System.Xml.Linq;
 using System.Net;
-using SearchEngine.Modules.Search;
+using SearchEngine.Searching;
 
 namespace SearchEngine
 {

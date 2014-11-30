@@ -56,10 +56,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core.cs" />
-    <Compile Include="Modules\Search\Indexer.cs" />
-    <Compile Include="Modules\Search\Search.cs" />
-    <Compile Include="Modules\Search\SearchProvider.cs" />
-    <Compile Include="Modules\Search\SearchResult.cs" />
+    <Compile Include="Modules\Searching\Indexer.cs" />
+    <Compile Include="Modules\Searching\Search.cs" />
+    <Compile Include="Modules\Searching\SearchProvider.cs" />
+    <Compile Include="Modules\Searching\SearchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
