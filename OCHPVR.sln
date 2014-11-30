@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0DA9E7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchEngine", "SearchEngine\SearchEngine.csproj", "{7EDA3EA4-2E6F-4E3B-B183-1933BAE8299C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexEngine", "IndexEngine\IndexEngine.csproj", "{63F010F1-53DE-4F07-A62E-A8FE029030E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{7EDA3EA4-2E6F-4E3B-B183-1933BAE8299C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EDA3EA4-2E6F-4E3B-B183-1933BAE8299C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EDA3EA4-2E6F-4E3B-B183-1933BAE8299C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63F010F1-53DE-4F07-A62E-A8FE029030E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63F010F1-53DE-4F07-A62E-A8FE029030E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63F010F1-53DE-4F07-A62E-A8FE029030E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63F010F1-53DE-4F07-A62E-A8FE029030E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
