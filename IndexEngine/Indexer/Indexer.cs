@@ -54,8 +54,7 @@ namespace IndexEngine.Indexer
             var request = new RestRequest(LoginUrl, Method.POST);
             LoginParameters.ForEach(lp => request.AddParameter(lp));
             LoginHeader.ForEach(lh => request.AddParameter(lh));
-            var response = client.Execute(request);
-            var isLoggedIn = response.Content.Contains("Lumocolor");
+            client.Execute(request);
             _LoggedIn = client;
             return client;
         }
