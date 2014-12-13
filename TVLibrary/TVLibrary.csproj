@@ -39,6 +39,13 @@
       <HintPath>..\packages\Flurl.1.0.2\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\packages\morelinq.1.1.0\lib\net35\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=105.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
@@ -54,6 +61,7 @@
   <ItemGroup>
     <Compile Include="LibraryManagers\HttpLibraryManager.cs" />
     <Compile Include="LibraryManagers\ILibraryManager.cs" />
+    <Compile Include="LibraryManagers\NzbDroneApiClasses\Missing.cs" />
     <Compile Include="LibraryManagers\NzbDroneLibraryManager.cs" />
     <Compile Include="LibraryObjects\Episode.cs" />
     <Compile Include="LibraryObjects\Season.cs" />

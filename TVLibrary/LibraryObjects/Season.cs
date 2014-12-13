@@ -10,6 +10,7 @@ namespace TVLibrary.LibraryObjects
     {
         public int SeasonNumber { get; set; }
         public int EpisodeCount { get; set; }
+        public Show Show { get; set; }
         public HashSet<Episode> Episodes { get; set; }
     }
 }

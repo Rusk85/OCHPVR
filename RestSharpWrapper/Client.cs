@@ -23,6 +23,21 @@ namespace RestSharpWrapper
             return pr.Item1;
         }
 
+        public RestClient Login(string BaseUrl, string ResourceUrl,
+            Method Method, params CustomParameter[] Parameters)
+        {
+            var paras = Parameters.Cast<Parameter>();
+            Login(BaseUrl, ResourceUrl, Method, paras.ToArray());
+            Parameters.ToList().ForEach(p =>
+            {
+                if (p.IsDefaultParameter)
+                {
+                    _HttpClient.AddDefaultParameter(p as Parameter);
+                }
+            });
+            return _HttpClient;
+        }
+
         public IRestResponse GetResponse(string BaseUrl, string ResourceUrl)
         {
             var pr = prepareRequest(BaseUrl, ResourceUrl);
