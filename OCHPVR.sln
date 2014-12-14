@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharpWrapper", "RestSha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVLibrary", "TVLibrary\TVLibrary.csproj", "{131E9271-CCEA-4916-9435-F73704D8426A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvailabilityChecker", "AvailabilityChecker\AvailabilityChecker.csproj", "{1BC83890-C009-4D54-928D-A19685947311}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{131E9271-CCEA-4916-9435-F73704D8426A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{131E9271-CCEA-4916-9435-F73704D8426A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{131E9271-CCEA-4916-9435-F73704D8426A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC83890-C009-4D54-928D-A19685947311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC83890-C009-4D54-928D-A19685947311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC83890-C009-4D54-928D-A19685947311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC83890-C009-4D54-928D-A19685947311}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
