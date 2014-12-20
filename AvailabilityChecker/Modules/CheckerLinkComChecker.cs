@@ -31,9 +31,14 @@ namespace AvailabilityChecker.Modules
             return checkAvailability(Links);
         }
 
+        public override IList<CheckerResult> GetAvailability(IList<Url> Links)
+        {
+            return checkLinks(Links);
+        }
+
         private bool checkAvailability(IList<Url> Links)
         {
-            return checkLinks(postLinks(Links), Links.Count);
+            return checkLinks(postLinks(Links));
         }
 
         private bool checkAvailability(Url Link)
@@ -72,19 +77,58 @@ namespace AvailabilityChecker.Modules
             };
         }
 
-        private bool checkLinks(HtmlDocument Links, int Checksum)
+        private bool checkLinks(HtmlDocument Links)
         {
-            var linkTable = Links.DocumentNode.Descendants()
-                .Where(d => d.Attributes.Contains("class")
-                && d.Attributes["class"].Value == "linkstable")
-                .FirstOrDefault();
+            var linkTable = getLinkTable(Links);
             var deadLinks = linkTable.Descendants()
                 .Where(d => d.Attributes.Contains("class")
                 && d.Attributes["class"].Value == "dead");
             var workingLinks = linkTable.Descendants()
                 .Where(d => d.Attributes.Contains("class")
                 && d.Attributes["class"].Value == "working");
-            return !deadLinks.Any() && workingLinks.Count() / 2 == Checksum;
+            return !deadLinks.Any();
         }
+
+        private IList<CheckerResult> checkLinks(IList<Url> Links)
+        {
+            var htmlDoc = postLinks(Links);
+            var linkTable = getLinkTable(htmlDoc);
+            var linkTblElems = linkTable.Elements("tr").Where(e =>
+                !e.Elements("th").Any()).ToList();
+            var retList = new List<CheckerResult>();
+            linkTblElems.ForEach(e => 
+                retList.Add(analyseLinkBlock(e)));
+            return retList;
+        }
+
+        private HtmlNode getLinkTable(HtmlDocument HtmlDocument)
+        {
+            return HtmlDocument.DocumentNode.Descendants()
+                .Where(d => d.Attributes.Contains("class")
+                && d.Attributes["class"].Value == "linkstable")
+                .FirstOrDefault();
+        }
+
+        private CheckerResult analyseLinkBlock(HtmlNode LinkBlock)
+        {
+            var tgtNode = LinkBlock.Descendants().FirstOrDefault(d =>
+                d.Attributes.Contains("href")
+                && d.Attributes.Contains("target")
+                && d.Attributes["target"].Value == "_blank"
+                && d.Attributes.Contains("class"));
+        
+            Func<string, bool> isOnline = s => s == "live";
+            bool isWorking = isOnline(tgtNode.Attributes["class"].Value);
+
+            return new CheckerResult
+            {
+                IsAvailable = isWorking,
+                Target = new Url(tgtNode.Attributes["href"].Value)
+            };
+        }
+        
+
+
+
     }
 }

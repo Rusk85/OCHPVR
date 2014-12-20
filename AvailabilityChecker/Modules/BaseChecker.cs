@@ -21,6 +21,13 @@ namespace AvailabilityChecker.Modules
 
         public abstract bool IsAvailable(IList<Url> Links);
 
+        public abstract IList<CheckerResult> GetAvailability(IList<Url> Links);
+
+        public IList<Url> GetSupportedLinks(IList<Url> Links)
+        {
+            return Links.Where(l => IsSupported(l)).ToList();
+        }
+
         public bool IsSupported(Url Hoster)
         {
             if (SupportedHosters == null)
@@ -29,8 +36,9 @@ namespace AvailabilityChecker.Modules
                     "No supported hosters for this checker provided");
             }
             return SupportedHosters.Select(sh => sh.Path)
-                .Any(p => p.ToLower() == Hoster.Path.ToLower());
+                .Any(p => Hoster.Path.ToLower().Contains(p.ToLower()));
         }
+
     }
 
     public abstract class HttpChecker : Checker

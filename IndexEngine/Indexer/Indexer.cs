@@ -81,19 +81,19 @@ namespace IndexEngine.Indexer
                     new Parameter
                     {
                         Name="vb_login_username",
-                        Value="YOUR_USERNAME",
+                        Value="Lumocolor",
                         Type=body
                     },
                     new Parameter
                     {
                         Name="vb_login_md5password",
-                        Value="YOUR_PASSWORD",
+                        Value="b4b3d67a0505d33092b8a935e335f700",
                         Type=body
                     },
                     new Parameter
                     {
                         Name="vb_login_md5password_utf",
-                        Value="YOUR_PASSWORD",
+                        Value="b4b3d67a0505d33092b8a935e335f700",
                         Type=body
                     },
                     new Parameter
