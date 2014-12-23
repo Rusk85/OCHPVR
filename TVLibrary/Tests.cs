@@ -17,7 +17,7 @@ namespace TVLibrary
         private static void Test_Auth()
         {
             var libMgm = new NzbDroneLibraryManager();
-            libMgm.GetMissingEpisodes(new DateTime(2014, 5, 5));
+            var eps = libMgm.GetMissingEpisodes(new DateTime(2014, 5, 5));
         }
     }
 }

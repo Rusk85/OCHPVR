@@ -12,6 +12,11 @@ namespace TVLibrary.LibraryManagers
         List<Episode> GetMissingEpisodes();
         List<Episode> GetMissingEpisodes(Show Show);
         List<Episode> GetMissingEpisodes(Show Show, Season Season);
+        /// <summary>
+        /// Get all missing episodes from that particular date.
+        /// </summary>
+        /// <param name="Date"></param>
+        /// <returns></returns>
         List<Episode> GetMissingEpisodes(DateTime Date);
     }
 }

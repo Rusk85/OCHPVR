@@ -80,20 +80,20 @@ namespace IndexEngine.Indexer
                 {
                     new Parameter
                     {
-                        Name="vb_login_username",
-                        Value="Lumocolor",
+                        Name="vb_login_username
+                        Value="YOURUSERNAME",
                         Type=body
                     },
                     new Parameter
                     {
-                        Name="vb_login_md5password",
-                        Value="b4b3d67a0505d33092b8a935e335f700",
+                        Name="vb_login_md5password
+                        Value="YOURPASSWORD",
                         Type=body
                     },
                     new Parameter
                     {
-                        Name="vb_login_md5password_utf",
-                        Value="b4b3d67a0505d33092b8a935e335f700",
+                        Name="vb_login_md5password_utf
+                        Value="YOURPASSWORD",
                         Type=body
                     },
                     new Parameter
