@@ -15,6 +15,7 @@ namespace TVLibrary.LibraryObjects
         public int LibraryManagerSpecificId { get; set; }
         public AirStatus Status { get; set; }
         public HashSet<Season> Seasons { get; set; }
+        public bool IsDateBasedEpisodeIndex { get; set; }
 
         public enum AirStatus
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TVLibrary.LibraryManagers;
+using MoreLinq;
 
 namespace TVLibrary
 {
@@ -17,7 +18,17 @@ namespace TVLibrary
         private static void Test_Auth()
         {
             var libMgm = new NzbDroneLibraryManager();
-            var eps = libMgm.GetMissingEpisodes(new DateTime(2014, 5, 5));
+            //libMgm.GetEpisodeFiles(19);
+            var eps = libMgm.GetMissingEpisodes(new DateTime(2014, 1, 1));
+            var colbert = eps.Where(e => e.Show.Name.ToLower().Contains("colbert")).ToList();
+            var allDateBased = colbert.All(c => c.Show.IsDateBasedEpisodeIndex);
+            var others = eps.Where(e => (e.Show.Name.ToLower().Contains("colbert") ||
+                e.Show.Name.ToLower().Contains("daily")) == false);
+            var indexBased = others.Where(o => !o.Show.IsDateBasedEpisodeIndex).ToList()
+                .DistinctBy(o => o.Show.Name).Select(o => o.Show.Name);
+            var dateBased = others.Where(o => o.Show.IsDateBasedEpisodeIndex).ToList()
+                .DistinctBy(o => o.Show.Name).Select(o => o.Show.Name);
         }
+
     }
 }

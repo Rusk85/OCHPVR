@@ -62,6 +62,8 @@
   <ItemGroup>
     <Compile Include="LibraryManagers\HttpLibraryManager.cs" />
     <Compile Include="LibraryManagers\ILibraryManager.cs" />
+    <Compile Include="LibraryManagers\NzbDroneApiClasses\Episode.cs" />
+    <Compile Include="LibraryManagers\NzbDroneApiClasses\EpisodeFile.cs" />
     <Compile Include="LibraryManagers\NzbDroneApiClasses\Missing.cs" />
     <Compile Include="LibraryManagers\NzbDroneLibraryManager.cs" />
     <Compile Include="LibraryObjects\Episode.cs" />

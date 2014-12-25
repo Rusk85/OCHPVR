@@ -18,7 +18,7 @@ namespace Core
         private static void Test_MissingEpisodeSearch()
         {
             var s = new Searcher();
-            var result = s.SearchMissingEpisodes(new DateTime(2014, 12, 15));
+            var result = s.SearchMissingEpisodes(new DateTime(2014, 12, 1));
         }
 
 

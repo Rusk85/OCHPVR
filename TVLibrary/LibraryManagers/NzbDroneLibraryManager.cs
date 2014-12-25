@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using TVLibrary.LibraryManagers.NzbDroneApiClasses;
+using System.IO;
 
 namespace TVLibrary.LibraryManagers
 {
@@ -26,6 +27,8 @@ namespace TVLibrary.LibraryManagers
         private Client _HttpClient = new Client();
         private string _Api_SystemStatus = "system/status";
         private string _Api_Missing = "missing";
+        private string _Api_EpisodeFile = "episodefile";
+        private string _Api_Episode = "episode";
 
         private readonly DateTime _DefaultCutOffDate = new DateTime(1900, 1, 1);
 
@@ -71,11 +74,6 @@ namespace TVLibrary.LibraryManagers
         #region NzbDroneApi
 
 
-        private string GetHistory()
-        {
-            return null;
-        }
-
         private List<Episode> GetMissing(DateTime CutOffDate)
         {
             var jsonString = _HttpClient.GetContent<string>
@@ -109,6 +107,81 @@ namespace TVLibrary.LibraryManagers
                 );
             var missing = JsonConvert.DeserializeObject<Missing>(jsonString);
             return GetMissingEpisodesFromResponse(missing,CutOffDate);
+        }
+
+        private List<NzbDroneEpisodeFile> GetEpisodeFiles(int seriesId)
+        {
+            var jsonString = _HttpClient.GetContent<string>
+                (
+                    _Api_EpisodeFile,
+                    Method.GET,
+                    new Parameter
+                    {
+                        Name = "seriesId",
+                        Value = seriesId,
+                        Type = ParameterType.GetOrPost
+                    }
+                );
+            return JsonConvert.DeserializeObject<List<NzbDroneEpisodeFile>>(jsonString);
+        }
+
+        /// <summary>
+        /// API seems broken. API itself returns NullPointerReference.
+        /// </summary>
+        /// <param name="EpisodeId"></param>
+        /// <returns></returns>
+        private NzbDroneEpisodeFile GetEpisodeFile(int EpisodeId)
+        {
+            var jsonString = _HttpClient.GetContent<string>
+                (
+                    _Api_EpisodeFile,
+                    Method.GET,
+                    new Parameter
+                    {
+                        Name = "id",
+                        Value = EpisodeId,
+                        Type = ParameterType.GetOrPost
+                    }
+                );
+            return JsonConvert.DeserializeObject<NzbDroneEpisodeFile>(jsonString);
+        }
+
+        private List<NzbDroneEpisode> GetEpisodes(int SeriesId)
+        {
+            var jsonString = _HttpClient.GetContent<string>
+                (
+                    _Api_Episode,
+                    Method.GET,
+                    new Parameter
+                    {
+                        Name = "seriesId",
+                        Value = SeriesId,
+                        Type = ParameterType.GetOrPost
+                    }
+                );
+            return JsonConvert.DeserializeObject<List<NzbDroneEpisode>>(jsonString);
+        }
+
+
+        /// <summary>
+        /// API seems broken. API itself returns NullPointerReference.
+        /// </summary>
+        /// <param name="EpisodeId"></param>
+        /// <returns></returns>
+        private NzbDroneEpisode GetEpisode(int EpisodeId)
+        {
+            var jsonString = _HttpClient.GetContent<string>
+                (
+                    _Api_Episode,
+                    Method.GET,
+                    new Parameter
+                    {
+                        Name = "id",
+                        Value = EpisodeId,
+                        Type = ParameterType.GetOrPost
+                    }
+                );
+            return JsonConvert.DeserializeObject<NzbDroneEpisode>(jsonString);
         }
 
 
@@ -165,7 +238,7 @@ namespace TVLibrary.LibraryManagers
         }
 
 
-        private Show MapNzb2LibraryProvider(Record Record)
+        private Show MapNzb2LibraryProvider(NzbDroneEpisode Record)
         {
             return new Show
             {
@@ -173,12 +246,13 @@ namespace TVLibrary.LibraryManagers
                 Name = Record.series.title,
                 Status = (Show.AirStatus)Enum.Parse(typeof(Show.AirStatus),
                     Record.series.status, true),
-                Seasons = new HashSet<LibraryObjects.Season>()
+                Seasons = new HashSet<LibraryObjects.Season>(),
+                IsDateBasedEpisodeIndex = isDateBasedEpisodeIndex(Record)
             };
         }
 
 
-        private TVLibrary.LibraryObjects.Season MapNzb2LibraryProvider(Show Show, Record Record)
+        private TVLibrary.LibraryObjects.Season MapNzb2LibraryProvider(Show Show, NzbDroneEpisode Record)
         {
             return new TVLibrary.LibraryObjects.Season
             {
@@ -190,7 +264,7 @@ namespace TVLibrary.LibraryManagers
         }
 
         private Episode MapNzb2LibraryProvider(Show Show, 
-            TVLibrary.LibraryObjects.Season Season, Record Record)
+            TVLibrary.LibraryObjects.Season Season, NzbDroneEpisode Record)
         {
             return new Episode
             {
@@ -200,6 +274,37 @@ namespace TVLibrary.LibraryManagers
                 Title = Record.title,
                 AirDate = Convert.ToDateTime(Record.airDate)
             };
+        }
+
+        private bool isDateBasedEpisodeIndex(NzbDroneEpisode Episode)
+        {
+            var episodes = GetEpisodes(Episode.seriesId);
+            var episodeFile = GetEpisodeFiles(Episode.seriesId).FirstOrDefault();
+
+            if (episodeFile == null) { return false; }
+
+            var existingEpisode = episodes.FirstOrDefault(e => e.episodeFileId == episodeFile.id);
+
+            var episodeFileName = Path.GetFileName(episodeFile.path);
+
+            var paddingLength = episodes.Count(e =>
+                e.seasonNumber == existingEpisode.seasonNumber);
+            paddingLength = paddingLength < 10
+                ? 2
+                : paddingLength.ToString().Length;
+
+
+            var index = "S" + existingEpisode.seasonNumber.ToString().PadLeft(2, '0')
+                + "E" + existingEpisode.episodeNumber.ToString().PadLeft(
+                paddingLength, '0');
+
+            var hasIndex = episodeFileName.ToUpper().Contains(index);
+
+            var airingDate = existingEpisode.airDate.Replace('-', '.');
+
+            var hasAiringDate = episodeFileName.ToUpper().Contains(airingDate);
+
+            return hasAiringDate && !hasIndex;
         }
 
 
