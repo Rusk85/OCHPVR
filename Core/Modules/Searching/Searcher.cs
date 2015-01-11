@@ -73,7 +73,7 @@ namespace Core.Searching
             {
                 throw new OCHPVRInitializationEception(
                     "No Indexers specified. Indexers are resources such as forums" +
-                    "that contain the actual links to OCHs. Searching for missing Episodes not possible");
+                    "that contain the actual links to OCHs. Searching for missing episodes not possible");
             }
         }
 

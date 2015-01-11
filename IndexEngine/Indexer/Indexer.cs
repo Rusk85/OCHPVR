@@ -3,6 +3,8 @@ using HtmlAgilityPack;
 using RestSharp;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
+using System.Linq;
 
 namespace IndexEngine.Indexer
 {
@@ -15,6 +17,26 @@ namespace IndexEngine.Indexer
 
     public static class IndexerFactory
     {
+
+        private static HashSet<BaseIndexer> _Indexers;
+
+        static IndexerFactory()
+        {
+            cacheIndexers();
+        }
+
+        private static void cacheIndexers()
+        {
+            if (_Indexers == null)
+            {
+                var idx = Assembly.GetAssembly(typeof(Core)).DefinedTypes
+                    .Where(t => t.BaseType == typeof(BaseIndexer))
+                    .Cast<BaseIndexer>();
+                _Indexers = new HashSet<BaseIndexer>(idx.ToList());
+            }
+        }
+
+
         public static BaseIndexer GetIndexer(IndexerType Indexer)
         {
             if (Indexer == IndexEngine.Indexer.IndexerType.tehPARADOX)
@@ -23,6 +45,19 @@ namespace IndexEngine.Indexer
             }
             return null;
         }
+
+
+        public static BaseIndexer GetIndexer(Url IndexSite)
+        {
+            return _Indexers.FirstOrDefault(bi =>
+            {
+                var idxBaseUrl = IndexSite.Path.Substring(0, bi.BaseUrl.Length);
+                return idxBaseUrl.ToLower() == bi.BaseUrl.ToLower();
+            });
+        }
+
+
+
     }
 
 
@@ -80,19 +115,19 @@ namespace IndexEngine.Indexer
                 {
                     new Parameter
                     {
-                        Name="vb_login_username
+                        Name="vb_login_username",
                         Value="YOURUSERNAME",
                         Type=body
                     },
                     new Parameter
                     {
-                        Name="vb_login_md5password
+                        Name="vb_login_md5password",
                         Value="YOURPASSWORD",
                         Type=body
                     },
                     new Parameter
                     {
-                        Name="vb_login_md5password_utf
+                        Name="vb_login_md5password_utf",
                         Value="YOURPASSWORD",
                         Type=body
                     },

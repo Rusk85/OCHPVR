@@ -32,9 +32,20 @@ namespace DownloadingEngine.Downloader
                 new Url("http://192.168.1.35:8000"),
                 new Url("api"),
                 "nas",
-                "admin"
+                "nas"
             ) { }
 
+        /// <summary>
+        /// Host portion includes port. 
+        /// Example: new Url("http://192.168.1.35:8000")
+        /// </summary>
+        /// <param name="Host"></param>
+        /// <param name="ApiBase"></param>
+        /// <param name="Username"></param>
+        /// <param name="Password"></param>
+        public pyLoadDownloader(Url Host, Url ApiBase, 
+            string Username, string Password) 
+            : base(Host, ApiBase, Username, Password) { }
 
         protected override Client Login()
         {
@@ -45,8 +56,8 @@ namespace DownloadingEngine.Downloader
                 base.BaseUrl.ToString(),
                 ts(CreateMethodUrl(login_Method)),
                 Method.POST,
-                new Parameter{Name="username", Value ="nas", Type = ParameterType.GetOrPost},
-                new Parameter{Name="password", Value ="admin", Type = ParameterType.GetOrPost}
+                new Parameter{Name="username", Value = Username, Type = ParameterType.GetOrPost},
+                new Parameter{Name="password", Value = Password, Type = ParameterType.GetOrPost}
             );
             base.HttpClient = client;
             return base.HttpClient;

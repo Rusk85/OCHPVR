@@ -3,6 +3,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,11 +33,27 @@ namespace SearchEngine.Searching
 
         public Search(params string[] Keywords)
         {
-            SearchProviders = new List<ISearchProvider> 
-                { new DuckDuckGoSearchProvider() };
-            Indexers = new List<IIndexer> 
-                { new TehParadoxIndexer() };
+            //SearchProviders = new List<ISearchProvider> 
+            //    { new DuckDuckGoSearchProvider() };
+            //Indexers = new List<IIndexer> 
+            //    { new TehParadoxIndexer() };
+            // see how this goes
+            loadAllSearchProvidersAndIndexers();
             this.Keywords = Keywords.ToList();
+        }
+
+        private void loadAllSearchProvidersAndIndexers()
+        {
+            //var types = Assembly.GetAssembly(typeof(ISearchProvider)).DefinedTypes
+            //    .Where(t => t.ImplementedInterfaces.Contains(typeof(ISearchProvider))).ToList();
+            var spTypes = Assembly.GetAssembly(typeof(ISearchProvider)).DefinedTypes
+                .Where(t => t.ImplementedInterfaces.Contains(typeof(ISearchProvider))).ToList();
+            SearchProviders = new List<ISearchProvider>();
+            spTypes.ForEach(t => SearchProviders.Add(Activator.CreateInstance(t) as ISearchProvider));
+            var idxTypes = Assembly.GetAssembly(typeof(ISearchProvider)).DefinedTypes
+                .Where(t => t.ImplementedInterfaces.Contains(typeof(IIndexer))).ToList();
+            Indexers = new List<IIndexer>();
+            idxTypes.ForEach(t => Indexers.Add(Activator.CreateInstance(t) as IIndexer));
         }
 
 
@@ -49,7 +66,7 @@ namespace SearchEngine.Searching
                 Indexers.ForEach(idx =>
                 {
                     requests.Add(new RestRequest(
-                        sp.ResourceUrl.AppendPathSegment("").SetQueryParam(sp.QueryParameter,
+                        sp.ResourceUrl.SetQueryParam(sp.QueryParameter,
                         Keywords.Aggregate(sp.IndexerSiteOperator + idx.Indexer + " ", (kw1, kw2) => kw1 + kw2 + " ")).ToString()));
                 });
                 SearchesToRun.Add(Tuple.Create(client, requests, sp));

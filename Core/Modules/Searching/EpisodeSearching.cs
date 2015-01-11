@@ -1,4 +1,5 @@
-﻿using SearchEngine.Searching;
+﻿using HtmlAgilityPack;
+using SearchEngine.Searching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,6 @@ namespace Core.Searching
     public class EpisodeSearchResult : SearchResult
     {
         public Episode Episode { get; set; }
+        public HtmlDocument IndexerSiteContent { get; set; }
     }
 }

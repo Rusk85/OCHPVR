@@ -36,7 +36,7 @@ namespace SearchEngine.Searching
 
         public Url ResourceUrl
         {
-            get { return new Url("html"); }
+            get { return new Url("html/"); }
         }
 
         public string QueryParameter
@@ -74,6 +74,63 @@ namespace SearchEngine.Searching
             });
             return retList;
         }
+    }
+
+    public class GoogleSearchProvider : ISearchProvider
+    {
+
+        public Url ProviderUrl
+        {
+            get { return new Url("https://www.google.com"); }
+        }
+
+        public Url ResourceUrl
+        {
+            get { return new Url("search"); }
+        }
+
+        public string QueryParameter
+        {
+            get { return "q"; }
+        }
+
+        public string IndexerSiteOperator
+        {
+            get { return "site:"; }
+        }
+
+        public List<SearchResult> ParseSearchResult(string ResponseContent)
+        {
+            var retList = new List<SearchResult>();
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(ResponseContent);
+            var LinkSnippetBlocks = htmlDoc.DocumentNode.Descendants().Where(d =>
+                d.Attributes.Contains("class")
+                && d.Attributes["class"].Value == "g");
+            LinkSnippetBlocks.ToList().ForEach(n =>
+            {
+                try
+                {
+                    retList.Add(new SearchResult
+                    {
+                        Link = cleanLink(new Url(n.Descendants().FirstOrDefault(d => d.Attributes.Contains("href"))
+                        .Attributes.FirstOrDefault(a => a.Name == "href").Value)),
+                        Snippet = n.Descendants().FirstOrDefault(d => d.Attributes.Contains("class")
+                        && d.Attributes["class"].Value == "st").InnerText
+                    });
+                }
+                catch (NullReferenceException) { }
+            });
+            return retList;
+        }
+
+        private Url cleanLink(Url DirtyLink)
+        {
+            return new Url(DirtyLink.QueryParams.FirstOrDefault(p => 
+                p.Key == QueryParameter).Value as string);
+        }
+
+
     }
 
 
